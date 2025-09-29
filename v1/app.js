@@ -1,0 +1,24 @@
+import express from 'express';
+import dotenv from 'dotenv';
+import cors from 'cors';
+import ratelimit from 'express-rate-limit';
+import v1Routes from './v1/v1.routes.js';
+import connectDB from './v1/config/db.js'
+const app = express();
+const PORT = process.env.PORT || 3000;
+const limiter = ratelimit({
+    windowMs: 15 *60 * 1000,
+    max: 100 ,
+    standardHeaders: true, 
+    legacyHeaders: false, 
+});
+
+app.use(limiter);
+dotenv.config();
+connectDB();
+app.use(cors());
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use ('/api', v1Routes);
+
+export default app;
