@@ -1,14 +1,14 @@
 {
-  "name": "Rest-API Republicana",
+  "name": "Obligatorio DFS",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "./server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start":"node server.js",
+    "start": "node server.js",
     "dev": "nodemon server.js"
   },
-  "author": "Alan Langelan & Nahuel Cabrera",
+  "author": "Alan Langelan & Gaston Jaurena",
   "license": "ISC",
   "dependencies": {
     "bcrypt": "^6.0.0",

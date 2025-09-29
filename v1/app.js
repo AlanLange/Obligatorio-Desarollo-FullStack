@@ -2,8 +2,8 @@ import express from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
 import ratelimit from 'express-rate-limit';
-import v1Routes from './v1/v1.routes.js';
-import connectDB from './v1/config/db.js'
+import v1Routes from './v1.routes.js';
+import connectDB from './config/db.js'
 const app = express();
 const PORT = process.env.PORT || 3000;
 const limiter = ratelimit({
