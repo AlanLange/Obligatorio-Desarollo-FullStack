@@ -12,7 +12,7 @@ export const loginUsuarioService = async (username, password) => {
   if (!usuario) return null;
   if (bcrypt.compareSync(password, usuario.password)) {
     token = jwt.sign(
-      { id: usuario._id, username: usuario.username },
+      { id:usuario.id},
       process.env.Secret,
       { expiresIn: "1h" }
     );
@@ -28,6 +28,6 @@ export const registrarUsuarioService = async (data) => {
   const hashedPassword = await bcrypt.hash(password, 10);
   const nuevoUsuario = new Cliente({username, password: hashedPassword,email});
   await nuevoUsuario.save();
-  const token = jwt.sign({ username }, process.env.Secret, { expiresIn: "1h" });
+  const token = jwt.sign({ id:nuevoUsuario.id }, process.env.Secret, { expiresIn: "1h" });
   return token;
 };
