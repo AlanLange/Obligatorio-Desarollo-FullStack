@@ -1,8 +1,11 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import Cliente from "../models/cliente.model.js";
-export const obtenerUsuarioPorUsernameService = async (username) => {
+export const obtenerUsuarioPorUsernameService = async (username,email) => {
    let buscado = await Cliente.findOne({ username }).exec();
+   if(!buscado){
+    buscado = await Cliente.findOne({ email }).exec();
+   } 
   return buscado; // null si no está en ninguna
 };
 
