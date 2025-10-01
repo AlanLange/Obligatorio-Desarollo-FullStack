@@ -19,6 +19,9 @@ connectDB();
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.get('/', (req, res) => {
+    res.send(`Holis`);
+});
 app.use ('/api', v1Routes);
 
 export default app;
