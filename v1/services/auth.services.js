@@ -1,7 +1,9 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import Cliente from "../models/cliente.model.js";
+
 export const obtenerUsuarioPorUsernameService = async (username,email) => {
+
    let buscado = await Cliente.findOne({ username }).exec();
    if(!buscado){
     buscado = await Cliente.findOne({ email }).exec();
@@ -15,7 +17,7 @@ export const loginUsuarioService = async (username,email, password) => {
   if (!usuario) return null;
   if (bcrypt.compareSync(password, usuario.password)) {
     token = jwt.sign(
-      { id:usuario.id},
+      { id:usuario._id},
       process.env.Secret,
       { expiresIn: "1h" }
     );
@@ -31,6 +33,6 @@ export const registrarUsuarioService = async (data) => {
   const hashedPassword = await bcrypt.hash(password, 10);
   const nuevoUsuario = new Cliente({username, password: hashedPassword,email});
   await nuevoUsuario.save();
-  const token = jwt.sign({ id:nuevoUsuario.id }, process.env.Secret, { expiresIn: "1h" });
+  const token = jwt.sign({ id:nuevoUsuario._id }, process.env.Secret, { expiresIn: "1h" });
   return token;
 };

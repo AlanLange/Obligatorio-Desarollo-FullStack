@@ -10,9 +10,8 @@ jwt.verify(token,process.env.Secret,(err,user)=>{
         return res.status(403).json({message:"Token expirado"});
     }
     else{
-        req.id=user.id;
+        req.id = user.id;
         next();
-
     }
 });
 }
