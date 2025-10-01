@@ -7,3 +7,12 @@ export const serviciosSchema = Joi.object({
     duracion: Joi.number().min(1).required()
 });
 
+
+export const serviciosPutSchema = Joi.object({
+    nombre: Joi.string().min(3).max(100),
+    descripcion: Joi.string().min(10).max(500),
+    precio: Joi.number().min(0),
+    categoria: Joi.string(),
+    duracion: Joi.number().min(1)
+});
+
