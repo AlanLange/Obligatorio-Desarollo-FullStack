@@ -11,7 +11,7 @@ export const login = async(req, res) => {
 export const register = async (req, res) => {
     const { username, password,email} = req.body;
     console.log(email);
-    const usuario = await obtenerUsuarioPorUsernameService(username);
+    const usuario = await obtenerUsuarioPorUsernameService(username,email);
     if (usuario) return res.status(409).json({ message: "El usuario ya existe" });
     else {
       const token = await registrarUsuarioService({ username, password,email });
