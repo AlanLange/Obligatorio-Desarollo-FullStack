@@ -2,13 +2,19 @@ import { loginUsuarioService, registrarUsuarioService} from '../services/auth.se
 import {obtenerUsuarioPorUsernameService} from '../services/auth.services.js';
 
 export const login = async(req, res) => {
-    const { username, password } = req.body;
-    const token = await loginUsuarioService(username, password);
+  try{
+    const { username, password,email } = req.body;
+    const token = await loginUsuarioService(username,email, password);
     if(!token) return res.status(401).json({ message: 'Invalid credentials' });
     res.status(200).json({ token, message: 'Login successful' });
+  }
+    catch (err) {
+      next(err);
+    }
 }
 
 export const register = async (req, res) => {
+  try{
     const { username, password,email} = req.body;
     console.log(email);
     const usuario = await obtenerUsuarioPorUsernameService(username,email);
@@ -19,6 +25,10 @@ export const register = async (req, res) => {
       return res
         .status(201)
         .json({ token, message: "Usuario creado exitosamente" });
+    }
+  }
+    catch (err) {
+      next(err);
     }
   };
 

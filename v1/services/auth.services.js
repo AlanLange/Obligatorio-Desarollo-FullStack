@@ -11,9 +11,9 @@ export const obtenerUsuarioPorUsernameService = async (username,email) => {
   return buscado; // null si no está en ninguna
 };
 
-export const loginUsuarioService = async (username, password) => {
+export const loginUsuarioService = async (username,email, password) => {
   let token = null;
-  const usuario = await obtenerUsuarioPorUsernameService(username);
+  const usuario = await obtenerUsuarioPorUsernameService(username,email);
   if (!usuario) return null;
   if (bcrypt.compareSync(password, usuario.password)) {
     token = jwt.sign(
