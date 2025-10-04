@@ -13,7 +13,7 @@ export const agregarServicioService = async (id, data) => {
         const servicio = new Servicio(data);
         await servicio.save();
     
-        cliente.servicios.push(servicio._id);
+        cliente.barberia.servicios.push(servicio._id);
         await cliente.save();
     
         return servicio;
@@ -21,16 +21,16 @@ export const agregarServicioService = async (id, data) => {
 }
 
 export const obtenerServiciosService = async (clienteId) => {
-    const cliente = await Cliente.findById(clienteId).populate('servicios');
+    const cliente = await Cliente.findById(clienteId).barberia.populate('servicios');
     if (!cliente) throw new Error('Cliente no encontrado');
-    return cliente.servicios;
+    return cliente.barberia.servicios;
 }
 
 
 export const obtenerServicioPorIdService = async (clienteId, servicioId) => {
-    const cliente = await Cliente.findById(clienteId).populate('servicios');
+    const cliente = await Cliente.findById(clienteId).barberia.populate('servicios');
     if (!cliente) throw new Error('Cliente no encontrado');
-    const servicio = cliente.servicios.find(servicio => servicio._id.toString() === servicioId);
+    const servicio = cliente.barberia.servicios.find(servicio => servicio._id.toString() === servicioId);
     if (!servicio) throw new Error('Servicio no encontrado');
     return servicio;
 }
@@ -41,7 +41,7 @@ export const eliminarServicioService = async (clienteId, servicioId) => {
     if (!cliente) throw new Error('Cliente no encontrado');
     const eliminado = await Servicio.findByIdAndDelete(servicioId);
     if (!eliminado) throw new Error('Servicio no encontrado o ya eliminado');
-    cliente.servicios.pull(servicioId);
+    cliente.barberia.servicios.pull(servicioId);
     await cliente.save();
     return servicioId;
 }
