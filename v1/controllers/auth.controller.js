@@ -9,6 +9,11 @@ export const login = async(req, res, next) => {
     res.status(200).json({ token, message: 'Login successful' });
   }
     catch (err) {
+      if (error.status && error.status !== 500) {
+        return res.status(error.status).json({
+          message: error.message,
+        });
+      }
       next(err);
     }
 }
@@ -28,6 +33,11 @@ export const register = async (req, res, next) => {
     }
   }
     catch (err) {
+      if (error.status && error.status !== 500) {
+        return res.status(error.status).json({
+          message: error.message,
+        });
+      }
       next(err);
     }
   };

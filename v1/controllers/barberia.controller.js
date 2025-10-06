@@ -7,6 +7,11 @@ export const obtenerBarberia = async (req, res, next) => {
         const barberia = await obtenerBarberiaService(clienteId);
         res.json(barberia);
     } catch (error) {
+      if (error.status && error.status !== 500) {
+        return res.status(error.status).json({
+          message: error.message,
+        });
+      }
         next(error);
     }
 }
