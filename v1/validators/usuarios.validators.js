@@ -11,3 +11,7 @@ export const usuarioRegisterSchema = Joi.object({
     .messages({'any.only': 'Ambas contraseñas deben ser iguales'}),
     email: Joi.string().min(6).max(128).required()
 });
+
+export const planSchema = Joi.object({
+  plan: Joi.string().valid("Plus", "Premium").required(),
+}).options({ abortEarly: false, stripUnknown: true });
