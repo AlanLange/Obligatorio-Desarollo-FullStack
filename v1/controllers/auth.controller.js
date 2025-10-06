@@ -1,7 +1,7 @@
 import { loginUsuarioService, registrarUsuarioService} from '../services/auth.services.js';
 import {obtenerUsuarioPorUsernameService} from '../services/auth.services.js';
 
-export const login = async(req, res) => {
+export const login = async(req, res, next) => {
   try{
     const { username, password,email } = req.body;
     const token = await loginUsuarioService(username,email, password);
@@ -13,7 +13,7 @@ export const login = async(req, res) => {
     }
 }
 
-export const register = async (req, res) => {
+export const register = async (req, res, next) => {
   try{
     const { username, password,email} = req.body;
     console.log(email);

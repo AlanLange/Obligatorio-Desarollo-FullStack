@@ -4,7 +4,7 @@ export const serviciosSchema = Joi.object({
     descripcion: Joi.string().min(10).max(500).required(),
     precio: Joi.number().min(0).required(),
     categoria: Joi.string().required(),
-    duracion: Joi.number().min(1).required()
+    duracion: Joi.number().min(1).required(),
 });
 
 

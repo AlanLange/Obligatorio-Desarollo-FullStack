@@ -1,16 +1,21 @@
 import express from 'express';
 import authRoutes from './routes/auth.routes.js';
 import serviciosRoutes from './routes/servicio.routes.js';
+import categoriasRoutes from './routes/categoria.routes.js';
 import { authMiddleware } from './middlewares/auth.middleware.js';
 import barberiaRoutes from './routes/barberia.routes.js';
 
 const router = express.Router();
+
 router.use("/auth", authRoutes);
 
 router.use(authMiddleware);
 
 router.use("/servicios", serviciosRoutes);
 
+router.use("/categorias", categoriasRoutes);
+
 router.use("/barberia", barberiaRoutes);
+
 
 export default router;

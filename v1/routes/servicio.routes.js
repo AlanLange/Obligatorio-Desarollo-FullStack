@@ -2,11 +2,11 @@ import express from 'express';
 const router = express.Router({ mergeParams: true });
 import { validateBody } from '../middlewares/validateBody.middleware.js';
 import { actualizarServicio, crearServicio, eliminarServicio, obtenerServicioPorId, obtenerServicios } from '../controllers/servicio.controller.js';
-import { serviciosPutSchema, serviciosSchema } from '../validators/servicio.validators.js';
+import { serviciosSchema } from '../validators/servicio.validators.js';
 
 router.get('/',  obtenerServicios);
 
-router.get('/:servicioId', validateBody(serviciosSchema), obtenerServicioPorId);
+router.get('/:servicioId', obtenerServicioPorId);
 
 router.post('/', validateBody(serviciosSchema), crearServicio);
 
