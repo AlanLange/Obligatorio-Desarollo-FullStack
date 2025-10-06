@@ -1,4 +1,5 @@
-import { obtenerBarberiaService,crearBarberiaService } from "../services/barberia.services";
+import { obtenerBarberiaService,crearBarberiaService } from "../services/barberia.services.js";
+import mongoose from "mongoose";
 
 export const obtenerBarberia = async (req, res, next) => {
     const clienteId = req.id;
@@ -10,13 +11,16 @@ export const obtenerBarberia = async (req, res, next) => {
     }
 }
 
+
 export const crearBarberia = async (req, res, next) => {
-    const clienteId = req.id;
-    const data = req.body;
-    try {
-        const barberia = await crearBarberiaService(clienteId, data);
-        res.status(201).json(barberia);
-    } catch (error) {
-        next(error);
+  try {
+    const clienteId = req.id; // viene del authMiddleware
+    if (!clienteId || !mongoose.isValidObjectId(clienteId)) {
+      return res.status(401).json({ message: "Token inválido o usuario no autenticado" });
     }
-}
+    const barberia = await crearBarberiaService(clienteId, req.body);
+    res.status(201).json(barberia);
+  } catch (error) {
+    next(error);
+  }
+};
