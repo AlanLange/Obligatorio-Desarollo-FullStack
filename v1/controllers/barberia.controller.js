@@ -21,6 +21,11 @@ export const crearBarberia = async (req, res, next) => {
     const barberia = await crearBarberiaService(clienteId, req.body);
     res.status(201).json(barberia);
   } catch (error) {
+    if (error.status && error.status !== 500) {
+      return res.status(error.status).json({
+        message: error.message,
+      });
+    }
     next(error);
   }
 };
