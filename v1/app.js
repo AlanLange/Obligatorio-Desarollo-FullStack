@@ -25,6 +25,6 @@ app.use(express.urlencoded({ extended: true }));
 app.get('/', (req, res) => {
     res.send(`Holis`);
 });
-app.use ('/api', v1Routes);
+app.use ('/v1', v1Routes);
 app.use(errorMiddleware);
 export default app;
