@@ -4,7 +4,7 @@ const clienteSchema = new mongoose.Schema({
     password: { type: String, required: true },
     email: { type: String, required: true, unique: true },
     plan: {type:String,enum:["Plus","Premium"],default:"Plus",required:false},
-    barberia : { type: mongoose.Schema.Types.ObjectId, ref: 'Barberia', required: true }
+    barberia : { type: mongoose.Schema.Types.ObjectId, ref: 'Barberia', required: false }
 });
 
 const Cliente = mongoose.model("Cliente", clienteSchema);
