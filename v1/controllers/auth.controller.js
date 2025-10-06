@@ -8,13 +8,13 @@ export const login = async(req, res, next) => {
     if(!token) return res.status(401).json({ message: 'Invalid credentials' });
     res.status(200).json({ token, message: 'Login successful' });
   }
-    catch (err) {
+    catch (error) {
       if (error.status && error.status !== 500) {
         return res.status(error.status).json({
           message: error.message,
         });
       }
-      next(err);
+      next(error);
     }
 }
 
@@ -32,13 +32,13 @@ export const register = async (req, res, next) => {
         .json({ token, message: "Usuario creado exitosamente" });
     }
   }
-    catch (err) {
+    catch (error) {
       if (error.status && error.status !== 500) {
         return res.status(error.status).json({
           message: error.message,
         });
       }
-      next(err);
+      next(error);
     }
   };
 
