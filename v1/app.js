@@ -16,7 +16,7 @@ const limiter = ratelimit({
     legacyHeaders: false, 
 });
 
-app.use(limiter);
+//app.use(limiter);
 dotenv.config();
 connectDB();
 app.use(cors());
