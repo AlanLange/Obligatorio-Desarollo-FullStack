@@ -8,15 +8,26 @@ export const crearCategoria = async (req, res) => {
         if(!categoria) return res.status(400).json({message: 'Error al crear la categoria'});
         res.status(201).json({message: 'Categoria creada exitosamente', categoria });
     }catch(error){
-        return res.status(500).json({message: error.message});
+        if (error.status && error.status !== 500) {
+        return res.status(error.status).json({
+          message: error.message,
+        });
+      }
+        next(error);
     }
 }
 
 export const obtenerCategorias = async (req, res) => {
+    const clienteId = req.id; 
     try{
-        const categorias = await obtenerCategoriaService();
+        const categorias = await obtenerCategoriaService(clienteId);
         res.status(200).json({ categorias });
     }catch(error){
-        return res.status(500).json({message: error.message});
+        if (error.status && error.status !== 500) {
+            return res.status(error.status).json({
+            message: error.message,
+            });
+        }
+        next(error);
     }
 }

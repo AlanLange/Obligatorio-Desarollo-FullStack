@@ -23,6 +23,7 @@ export const register = async (req, res, next) => {
     console.log(req.body);
     const { username, password,email} = req.body;
     console.log(username);
+    
     const usuario = await obtenerUsuarioPorUsernameService(username,email);
     if (usuario) return res.status(409).json({ message: "El usuario ya existe" });
     else {

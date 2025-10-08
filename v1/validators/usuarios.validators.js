@@ -15,7 +15,7 @@ export const usuarioRegisterSchema = Joi.object({
     password: Joi.string().min(6).max(128).required(),
     confirmPassword: Joi.string().valid(Joi.ref('password')).required()
     .messages({'any.only': 'Ambas contraseñas deben ser iguales'}),
-    email: Joi.string().min(6).max(128).required()
+    email: Joi.string().email().min(6).max(128).required()
 });
 
 export const planSchema = Joi.object({
