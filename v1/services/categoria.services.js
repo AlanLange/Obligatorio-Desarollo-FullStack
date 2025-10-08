@@ -8,6 +8,7 @@ export const crearCategoriaService = async (data, clienteId) => {
     }
     else{
         const categoria = new Categoria(data);
+        categoria.cliente = clienteId;
         await categoria.save();
         return categoria;
     }
@@ -19,6 +20,6 @@ export const obtenerCategoriaService = async (clienteId) => {
     if(!categorias || categorias.length === 0){
         throw new Error('No se encontraron categorias para este usuario');
     }
-    
+
     return categorias;
 }
