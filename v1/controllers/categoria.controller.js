@@ -1,10 +1,11 @@
 import { crearCategoriaService, obtenerCategoriaService } from "../services/categoria.services.js";
 
 
-export const crearCategoria = async (req, res) => {
-    const categoriaData = req.body;
+export const crearCategoria = async (req, res, next) => {
+        const categoriaData = req.body;
+        const clienteId = req.id; 
     try{
-        const categoria = await crearCategoriaService(categoriaData);
+        const categoria = await crearCategoriaService(categoriaData, clienteId);
         if(!categoria) return res.status(400).json({message: 'Error al crear la categoria'});
         res.status(201).json({message: 'Categoria creada exitosamente', categoria });
     }catch(error){
@@ -17,7 +18,7 @@ export const crearCategoria = async (req, res) => {
     }
 }
 
-export const obtenerCategorias = async (req, res) => {
+export const obtenerCategorias = async (req, res, next) => {
     const clienteId = req.id; 
     try{
         const categorias = await obtenerCategoriaService(clienteId);

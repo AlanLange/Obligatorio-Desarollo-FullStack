@@ -3,9 +3,8 @@ import Categoria from "../models/categoria.model.js";
 
 
 export const crearCategoriaService = async (data, clienteId) => {
-
-    const barberia = await Barberia.findOne({ clienteId: clienteId })
-        .populate('categorias');
+    
+    const barberia = await Barberia.findOne({ clienteId: clienteId }).populate('categorias');
     
     if (!barberia) {
         const err = new Error("Barbería no encontrada para este cliente");
@@ -30,6 +29,7 @@ export const crearCategoriaService = async (data, clienteId) => {
     await nuevaCategoria.save();
     
     barberia.categorias.push(nuevaCategoria._id);
+
     await barberia.save();
     
     return nuevaCategoria;
@@ -37,8 +37,7 @@ export const crearCategoriaService = async (data, clienteId) => {
 
 export const obtenerCategoriaService = async (clienteId) => {
 
-    const barberia = await Barberia.findOne({ clienteId: clienteId })
-        .populate('categorias');
+    const barberia = await Barberia.findOne({ clienteId: clienteId }).populate('categorias');
     
     if (!barberia) {
         const err = new Error("Barbería no encontrada para este cliente");
