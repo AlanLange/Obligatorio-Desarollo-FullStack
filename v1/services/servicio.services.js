@@ -75,6 +75,14 @@ export const obtenerServicioPorIdService = async (clienteId, servicioId) => {
         throw err;
     }
 
+    const barberia = await Barberia.findOne({ clienteId : clienteId });
+    if (!barberia) {
+        const err = new Error('La barbería no está creada. Crea una barbería para ver los servicios.');
+        err.status = 404;
+        throw err;
+    }
+    await barberia.populate('servicios');
+
     const servicio = barberia.servicios.find(servicio => servicio._id.toString() === servicioId);
     if (!servicio) {
         const err = new Error('Servicio no encontrado');
