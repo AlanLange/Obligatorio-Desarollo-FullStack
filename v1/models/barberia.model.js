@@ -5,7 +5,8 @@ const barberiaSchema = new mongoose.Schema({
     clienteId : { type: mongoose.Schema.Types.ObjectId, ref: 'Cliente', required: true, unique: true },
     direccion: { type: String, required: true },
     telefono: { type: String, required: true },
-    servicios: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Servicio' }]
+    servicios: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Servicio' }],
+    categorias: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Categoria' }]
 });
 
 const Barberia = mongoose.model("Barberia", barberiaSchema);
