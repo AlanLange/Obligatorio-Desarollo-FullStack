@@ -1,7 +1,7 @@
 import { actualizarServicioService, agregarServicioService, eliminarServicioService, obtenerServicioPorIdService, obtenerServiciosService } from "../services/servicio.services.js";
 
 
-export const crearServicio = async(req, res) => {
+export const crearServicio = async(req, res, next) => {
     const id  = req.id;
     const servicioData = req.body;
 
@@ -20,7 +20,7 @@ export const crearServicio = async(req, res) => {
     }
 }
 
-export const obtenerServicios = async(req, res) => {
+export const obtenerServicios = async(req, res, next) => {
     const id  = req.id;
     try{
         const servicios = await obtenerServiciosService(id);
@@ -35,7 +35,7 @@ export const obtenerServicios = async(req, res) => {
     }
 }
 
-export const obtenerServicioPorId = async(req, res) => {
+export const obtenerServicioPorId = async(req, res, next) => {
     const id  = req.id;
     const { servicioId } = req.params;
     try{
@@ -51,7 +51,7 @@ export const obtenerServicioPorId = async(req, res) => {
     }   
 }
 
-export const actualizarServicio = async(req, res) => {
+export const actualizarServicio = async(req, res, next) => {
     const id  = req.id;
     const { servicioId } = req.params;
     const servicioData = req.body;
@@ -71,7 +71,7 @@ export const actualizarServicio = async(req, res) => {
     }
 }
 
-export const eliminarServicio = async(req, res) => {
+export const eliminarServicio = async(req, res, next) => {
     const id  = req.id;
     const { servicioId } = req.params;
     try{
