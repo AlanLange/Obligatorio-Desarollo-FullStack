@@ -6,22 +6,33 @@ import Servicio from "../models/servicio.model.js";
 export const agregarServicioService = async (id, data) => {
 
     const cliente = await Cliente.findById(id);
-    if (!cliente) throw new Error('Cliente no encontrado');
+    if (!cliente) 
+        {
+            const err = new Error("Cliente no encontrado");
+            err.status = 404;
+            throw err;
+        }
     const barberia = await Barberia.findOne({ clienteId : id });
 
     if (!barberia) {
-        throw new Error("Barbería no encontrada para este cliente");
+        const err = new Error("Barbería no encontrada para este cliente");
+        err.status = 404;
+        throw err;
     }
 
     if(cliente.plan === "Plus" && barberia.servicios.length >= 10) {
-        throw new Error('Límite de servicios alcanzado para el plan Plus');
+        const err = new Error('Límite de servicios alcanzado para el plan Plus');
+        err.status = 403;
+        throw err;
     }else{
         const servicioExistente = await Servicio.findOne({ 
             nombre: data.nombre
         });
 
         if (servicioExistente) {
-            throw new Error('Ya existe un servicio con este nombre');
+            const err = new Error('Ya existe un servicio con este nombre');
+            err.status = 409;
+            throw err;
         }
         const servicio = new Servicio(data);
         await servicio.save();
@@ -37,10 +48,18 @@ export const obtenerServiciosService = async (clienteId) => {
 
 
     const cliente = await Cliente.findById(clienteId);
-    if (!cliente) throw new Error('Cliente no encontrado');
+    if (!cliente) {
+        const err = new Error('Cliente no encontrado');
+        err.status = 404;
+        throw err;
+    }
 
     const barberia = await Barberia.findOne({ clienteId : clienteId });
-    if (!barberia) throw new Error('La barbería no está creada. Crea una barbería para ver los servicios.');
+    if (!barberia) {
+        const err = new Error('La barbería no está creada. Crea una barbería para ver los servicios.');
+        err.status = 404;
+        throw err;
+    }
     await barberia.populate('servicios');
 
     return barberia.servicios;
@@ -50,14 +69,18 @@ export const obtenerServiciosService = async (clienteId) => {
 export const obtenerServicioPorIdService = async (clienteId, servicioId) => {
     
     const cliente = await Cliente.findById(clienteId);
-    if (!cliente) throw new Error('Cliente no encontrado');
-    
-    const barberia = await Barberia.findOne({ clienteId : clienteId });
-    if (!barberia) throw new Error('La barbería no está creada. Crea una barbería para ver el servicio.');
-    await barberia.populate('servicios');
+    if (!cliente) {
+        const err = new Error('Cliente no encontrado');
+        err.status = 404;
+        throw err;
+    }
 
     const servicio = barberia.servicios.find(servicio => servicio._id.toString() === servicioId);
-    if (!servicio) throw new Error('Servicio no encontrado');
+    if (!servicio) {
+        const err = new Error('Servicio no encontrado');
+        err.status = 404;
+        throw err;
+    }
 
     return servicio;
 }
@@ -65,30 +88,51 @@ export const obtenerServicioPorIdService = async (clienteId, servicioId) => {
 
 export const eliminarServicioService = async (clienteId, servicioId) => {
     const cliente = await Cliente.findById(clienteId);
-    if (!cliente) throw new Error('Cliente no encontrado');
-    
-    const barberia = await Barberia.findOne({ clienteId : clienteId });
-    if (!barberia) throw new Error('La barbería no está creada. Crea una barbería para eliminar servicios.');
-    await barberia.populate('servicios');
+    if (!cliente) {
+        const err = new Error('Cliente no encontrado');
+        err.status = 404;
+        throw err;
+    }
 
     const eliminado = await Servicio.findByIdAndDelete(servicioId);
-    if (!eliminado) throw new Error('Servicio no encontrado o ya eliminado');
+    if (!eliminado) {
+        const err = new Error('Servicio no encontrado o ya eliminado');
+        err.status = 404;
+        throw err;
+    }
+    const barberia = await Barberia.findOne({ clienteId: clienteId });
+    if (!barberia) {
+        const err = new Error('La barbería no está creada. Crea una barbería para eliminar servicios.');
+        err.status = 404;
+        throw err;
+    }
     barberia.servicios.pull(servicioId);
-    
-    await cliente.save();
+    await barberia.save();
     return servicioId;
 }
 
 export const actualizarServicioService = async (clienteId, servicioId, data) => {
 
     const cliente = await Cliente.findById(clienteId);
-    if (!cliente) throw new Error('Cliente no encontrado');
+    if (!cliente) {
+        const err = new Error('Cliente no encontrado');
+        err.status = 404;
+        throw err;
+    }
 
     const barberia = await Barberia.findOne({ clienteId : clienteId });
-    if (!barberia) throw new Error('La barbería no está creada. Crea una barbería para actualizar servicios.');
+    if (!barberia) {
+        const err = new Error('La barbería no está creada. Crea una barbería para actualizar servicios.');
+        err.status = 404;
+        throw err;
+    }
     await barberia.populate('servicios');
 
     const servicio = await Servicio.findByIdAndUpdate(servicioId, data, { new: true });
-    if (!servicio) throw new Error('Servicio no encontrado');
+    if (!servicio) {
+        const err = new Error('Servicio no encontrado');
+        err.status = 404;
+        throw err;
+    }
     return servicio;
 }
