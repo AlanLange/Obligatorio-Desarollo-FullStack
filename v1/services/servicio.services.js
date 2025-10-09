@@ -109,7 +109,7 @@ export const eliminarServicioService = async (clienteId, servicioId) => {
         throw err;
     }
     if (!barberia.servicios.includes(servicioId)) {
-        const err = new Error('No tienes permisos para eliminar este servicio');
+        const err = new Error('No existe el servicio o no tienes permisos para eliminar este servicio');
         err.status = 403;
         throw err;
     }
@@ -142,7 +142,7 @@ export const actualizarServicioService = async (clienteId, servicioId, data) => 
         throw err;
     }
     if (!barberia.servicios.includes(servicioId)) {
-        const err = new Error('No tienes permisos para actualizar este servicio');
+        const err = new Error('No existe el servicio o no tienes permisos para actualizar este servicio');
         err.status = 403;
         throw err;
     }
