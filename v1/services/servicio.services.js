@@ -102,21 +102,28 @@ export const eliminarServicioService = async (clienteId, servicioId) => {
         throw err;
     }
 
-    const eliminado = await Servicio.findByIdAndDelete(servicioId);
-    if (!eliminado) {
-        const err = new Error('Servicio no encontrado o ya eliminado');
-        err.status = 404;
-        throw err;
-    }
     const barberia = await Barberia.findOne({ clienteId: clienteId });
     if (!barberia) {
         const err = new Error('La barbería no está creada. Crea una barbería para eliminar servicios.');
         err.status = 404;
         throw err;
     }
+    if (!barberia.servicios.includes(servicioId)) {
+        const err = new Error('No tienes permisos para eliminar este servicio');
+        err.status = 403;
+        throw err;
+    }
+    const eliminado = await Servicio.findByIdAndDelete(servicioId);
+    if (!eliminado) {
+        const err = new Error('Servicio no encontrado o ya eliminado');
+        err.status = 404;
+        throw err;
+    }
+
     barberia.servicios.pull(servicioId);
     await barberia.save();
     return servicioId;
+    
 }
 
 export const actualizarServicioService = async (clienteId, servicioId, data) => {
@@ -132,6 +139,11 @@ export const actualizarServicioService = async (clienteId, servicioId, data) => 
     if (!barberia) {
         const err = new Error('La barbería no está creada. Crea una barbería para actualizar servicios.');
         err.status = 404;
+        throw err;
+    }
+    if (!barberia.servicios.includes(servicioId)) {
+        const err = new Error('No tienes permisos para actualizar este servicio');
+        err.status = 403;
         throw err;
     }
     await barberia.populate('servicios');
