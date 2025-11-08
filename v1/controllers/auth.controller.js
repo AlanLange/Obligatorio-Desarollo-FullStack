@@ -6,9 +6,9 @@ export const login = async(req, res, next) => {
     const { username, password,email } = req.body;
     const usuario = await obtenerUsuarioPorUsernameService(username,email);
     const token = await loginUsuarioService(username,email, password);
-    const {plan} =  usuario;
+    const {plan,username: nombreUsuario} =  usuario;
     if(!token) return res.status(401).json({ message: 'Invalid credentials' });
-    res.status(200).json({ token, plan,message: 'Login successful' });
+    res.status(200).json({ token, plan,username: nombreUsuario, message: 'Login successful' });
   }
     catch (error) {
       if (error.status && error.status !== 500) {
