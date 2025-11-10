@@ -7,7 +7,7 @@ const servicioSchema = new mongoose.Schema({
     categoria: { type: mongoose.Schema.Types.ObjectId, ref: 'Categoria', required: true },
     descripcion: { type: String },
      createdAt: { type: Date, required: true },
-     urlImage: { type: String , default: 'https://i.pinimg.com/736x/90/c5/85/90c58554fad3dd2ca1c3d5c32adb5ba3.jpg'},
+     urlImage: { type: String , default: '/img/default-image.jpg'},
 });
 
 const Servicio = mongoose.model("Servicio", servicioSchema);
