@@ -48,7 +48,8 @@ export const register = async (req, res, next) => {
 export const validateToken = (req, res) => {
   return res.status(200).json({
     valid: true,
-     ...req.user,
+    username: req.username,
+    plan: req.plan
   });
 };
 

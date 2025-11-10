@@ -25,6 +25,8 @@ app.use(express.urlencoded({ extended: true }));
 app.get('/', (req, res) => {
     res.send(`Running Api`);
 });
+
+
 app.use ('/v1', v1Routes);
 app.use(errorMiddleware);
 export default app;
