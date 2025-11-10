@@ -1,10 +1,8 @@
 import express from 'express';
 const router = express.Router({ mergeParams: true });
-import { login } from '../controllers/auth.controller.js';
-import { register } from '../controllers/auth.controller.js';
+import { login,register,validateToken} from '../controllers/auth.controller.js';
 import { validateBody } from '../middlewares/validateBody.middleware.js';
-import { usuarioLoginSchema } from '../validators/usuarios.validators.js';
-import { usuarioRegisterSchema } from '../validators/usuarios.validators.js';
+import { usuarioLoginSchema,usuarioRegisterSchema} from '../validators/usuarios.validators.js';
 import { authMiddleware } from '../middlewares/auth.middleware.js';
 import { validateSesion } from '../middlewares/validateSesion.middleware.js';
 
