@@ -26,7 +26,7 @@ export const agregarServicioService = async (id, data) => {
         throw err;
     }
 
-    // ✅ Validación POR BARBERÍA
+    //Validación POR BARBERÍA
     const servicioExistente = await Servicio.findOne({
         _id: { $in: barberia.servicios },
         nombre: data.nombre
@@ -132,8 +132,9 @@ export const eliminarServicioService = async (clienteId, servicioId) => {
     
 }
 
-export const actualizarServicioService = async (clienteId, servicioId, data) => {
+import mongoose from 'mongoose';
 
+export const actualizarServicioService = async (clienteId, servicioId, data) => {
     const cliente = await Cliente.findById(clienteId);
     if (!cliente) {
         const err = new Error('Cliente no encontrado');
@@ -141,18 +142,39 @@ export const actualizarServicioService = async (clienteId, servicioId, data) => 
         throw err;
     }
 
-    const barberia = await Barberia.findOne({ clienteId : clienteId });
+    const barberia = await Barberia.findOne({ clienteId });
     if (!barberia) {
         const err = new Error('La barbería no está creada. Crea una barbería para actualizar servicios.');
         err.status = 404;
         throw err;
     }
-    if (!barberia.servicios.includes(servicioId)) {
+
+    // ObjectId a String para comparar
+    const servicioPerteneceABarberia = barberia.servicios
+        .some(id => id.toString() === servicioId.toString());
+
+    if (!servicioPerteneceABarberia) {
         const err = new Error('No existe el servicio o no tienes permisos para actualizar este servicio');
         err.status = 403;
         throw err;
     }
-    await barberia.populate('servicios');
+
+    //Si quieren cambiar el nombre, validar que no exista ya ese nombre en ESTA barbería
+    if (data.nombre) {
+        const servicioDuplicado = await Servicio.findOne({
+            nombre: data.nombre,
+            $and: [
+                { _id: { $in: barberia.servicios } },    // solo servicios de esta barbería
+                { _id: { $ne: servicioId } }             // excluimos el mismo servicio que estamos editando
+            ]
+        });
+
+        if (servicioDuplicado) {
+            const err = new Error('Ya existe un servicio con este nombre en esta barbería');
+            err.status = 409;
+            throw err;
+        }
+    }
 
     const servicio = await Servicio.findByIdAndUpdate(servicioId, data, { new: true });
     if (!servicio) {
@@ -160,5 +182,7 @@ export const actualizarServicioService = async (clienteId, servicioId, data) => 
         err.status = 404;
         throw err;
     }
+
     return servicio;
-}
+};
+
