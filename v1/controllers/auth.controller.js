@@ -6,6 +6,7 @@ export const login = async(req, res, next) => {
     const { username, password,email } = req.body;
     const usuario = await obtenerUsuarioPorUsernameService(username,email);
     const token = await loginUsuarioService(username,email, password);
+    if (!usuario) return res.status(401).json({ message: 'Invalid credentials' });
     const {plan,username: nombreUsuario} =  usuario;
     if(!token) return res.status(401).json({ message: 'Invalid credentials' });
     res.status(200).json({ token, plan,username: nombreUsuario, message: 'Login successful' });

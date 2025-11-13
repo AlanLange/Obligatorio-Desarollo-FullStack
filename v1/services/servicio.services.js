@@ -6,12 +6,12 @@ import Servicio from "../models/servicio.model.js";
 export const agregarServicioService = async (id, data) => {
 
     const cliente = await Cliente.findById(id);
-    if (!cliente) 
-        {
-            const err = new Error("Cliente no encontrado");
-            err.status = 404;
-            throw err;
-        }
+    if (!cliente) {
+        const err = new Error("Cliente no encontrado");
+        err.status = 404;
+        throw err;
+    }
+
     const barberia = await Barberia.findOne({ clienteId : id });
 
     if (!barberia) {
@@ -20,29 +20,35 @@ export const agregarServicioService = async (id, data) => {
         throw err;
     }
 
-    if(cliente.plan === "Plus" && barberia.servicios.length >= 10) {
-        const err = new Error('Límite de servicios alcanzado para el plan Plus');
+    if (cliente.plan === "Plus" && barberia.servicios.length >= 10) {
+        const err = new Error("Límite de servicios alcanzado para el plan Plus");
         err.status = 403;
         throw err;
-    }else{
-        const servicioExistente = await Servicio.findOne({ 
-            nombre: data.nombre
-        });
-
-        if (servicioExistente) {
-            const err = new Error('Ya existe un servicio con este nombre');
-            err.status = 409;
-            throw err;
-        }
-        const servicio = new Servicio(data);
-        await servicio.save();
-    
-        barberia.servicios.push(servicio._id);
-        await barberia.save();
-    
-        return servicio;
     }
-}
+
+    // ✅ Validación POR BARBERÍA
+    const servicioExistente = await Servicio.findOne({
+        _id: { $in: barberia.servicios },
+        nombre: data.nombre
+    });
+
+    if (servicioExistente) {
+        const err = new Error("Ya existe un servicio con este nombre en esta barbería");
+        err.status = 409;
+        throw err;
+    }
+
+    // Crear servicio
+    const servicio = new Servicio(data);
+    await servicio.save();
+
+    // Asociarlo a la barbería
+    barberia.servicios.push(servicio._id);
+    await barberia.save();
+
+    return servicio;
+};
+
 
 export const obtenerServiciosService = async (clienteId) => {
 
